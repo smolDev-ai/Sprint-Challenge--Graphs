@@ -41,91 +41,88 @@ player = Player(world.starting_room)
 opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
 
-def traversal(room, visited=None):
-
-    if not visited:
-        visited = set()
-
-    current_path = []
-
-    visited.add(room.id)
-
-    # this is going to act as "get neighbors," basically
-    for direction in room.get_exits():
-        new_room = room.get_room_in_direction(direction)
-        print(new_room)
-
-        if new_room.id not in visited:
-            # recurse
-            new_path = traversal(new_room, visited)
-            print(new_path)
-            
-            # if traversal returns something
-            if new_path:
-                # create an array with the the direction string
-                # and concat it with the new path array and 
-                # creates an array out of the strings in the opposites dict
-                # at that direction
-                make_path = [direction] + new_path + [opposites[direction]]
-            else:
-                # if new path doesn't return anything, create an array out of the direction strings
-                # and whatever's in opposites at that direction
-                make_path = [direction, opposites[direction]]
-            print(current_path)
-            current_path = current_path + make_path
-
-
-
-
+def traversal(room):
     # scaffold the stuff
     # DFT but with a dict like Social
-    # stack = Stack()
-    # stack.push([room])
-    # visited = {} # dict like social.
+    stack = Stack()
+    stack.push([room])
+    visited = {} # dict like social.
 
-    # current_path = []
+    current_path = []
     
-    # def get_neighbors(node_id):
-    #     rooms = []
+    def get_neighbors(node_id):
+        rooms = []
 
-    #     for direction in node_id.get_exits():
-    #         if node_id.get_room_in_direction(direction):
-    #             current_path.append(direction)
-    #             rooms.append(node_id.get_room_in_direction(direction))
-    #         else:
-    #             current_path.append(opposites[direction])
-
-    #         # path = node_id.get_room_in_direction(direction)
-
-    #         # if path:
-    #         #     # print(f"{current_path}")
-    #         #     
-    #         # # if deadend
-    #         # else:
-    #         #     print('hit else')
-    #         #     current_path.append(opposites[direction])
-    #         #     print(current_path)
-    #     return rooms
+        for direction in node_id.get_exits():
+            path = node_id.get_room_in_direction(direction)
+            
+            if direction not in visited:
+                visited[node_id.id][direction] = path.id
+                if path:
+                    current_path.append(direction)
+                    rooms.append(path)
+            else:
+                current_path.append(opposites[direction])
+        return rooms
     
 
-    # # spec mentions keeping track of rooms
-    # # using a dict formate of room.id: [connections]
+    # spec mentions keeping track of rooms
+    # using a dict format of room.id: [connections]
 
-    # # this means rooms are nodes, and directions are edges.
-    # while stack.size() > 0:
-    #     player_path = stack.pop()
-    #     player_room = player_path[-1]
+    # this means rooms are nodes, and directions are edges.
+    while stack.size() > 0:
+        player_path = stack.pop()
+        player_room = player_path[-1]
 
-    #     if player_room.id not in visited:
-    #         visited[player_room.id] = player_path
+        if player_room.id not in visited:
+            visited[player_room.id] = {}
 
-    #         for next_room in get_neighbors(player_room):
-    #             stack.push([*player_path, next_room])
+        for next_room in get_neighbors(player_room):
+            stack.push([*player_path, next_room])
                 
     return current_path
 
 
 traversal_path = traversal(player.current_room)
+
+
+
+# Recursion
+# def traversal(room, visited=None):
+
+#     if not visited:
+#         visited = set()
+
+#     current_path = []
+
+#     visited.add(room.id)
+
+#     # this is going to act as "get neighbors," basically
+#     for direction in room.get_exits():
+#         new_room = room.get_room_in_direction(direction)
+#         print(new_room)
+
+#         if new_room.id not in visited:
+#             # recurse
+#             new_path = traversal(new_room, visited)
+#             print(new_path)
+            
+#             # if traversal returns something
+#             if new_path:
+#                 # create an array with the the direction string
+#                 # and concat it with the new path array and
+#                 # creates an array out of the strings in the opposites dict
+#                 # at that direction
+#                 make_path = [direction] + new_path + [opposites[direction]]
+#             else:
+#                 # if new path doesn't return anything, create an array out
+#                 # of the direction strings
+#                 # and whatever's in opposites at that direction
+#                 make_path = [direction, opposites[direction]]
+#             current_path = current_path + make_path
+#     return current_path
+
+
 
 
 
