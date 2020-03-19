@@ -35,56 +35,18 @@ player = Player(world.starting_room)
 # room.get_room_in_direction()
 # to find all available untraversed rooms.
 
-# I know we're going to need an opposites dict to move backwards, though I'm not super sure why. Late night brain is unhelpful.
+# I know we're going to need an opposites dict to move backwards, though I'm
+# not super sure why. Late night brain is unhelpful.
 
-# using DFT to traverse all nodes, with an extra path variable to pass letters to if thei rooms exit it marked with a question mark somehow
+# using DFT to traverse all nodes, with an extra path variable to pass letters
+# to if their rooms exit it marked with a question mark somehow
 opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
 
-def traversal(room):
-    # scaffold the stuff
-    # DFT but with a dict like Social
-    stack = Stack()
-    stack.push([room])
-    visited = {} # dict like social.
+traversal_path = []
 
-    current_path = []
-    
-    def get_neighbors(node_id):
-        rooms = []
-
-        for direction in node_id.get_exits():
-            path = node_id.get_room_in_direction(direction)
-            
-            if direction not in visited:
-                visited[node_id.id][direction] = path.id
-                if path:
-                    current_path.append(direction)
-                    rooms.append(path)
-            else:
-                current_path.append(opposites[direction])
-        return rooms
-    
-
-    # spec mentions keeping track of rooms
-    # using a dict format of room.id: [connections]
-
-    # this means rooms are nodes, and directions are edges.
-    while stack.size() > 0:
-        player_path = stack.pop()
-        player_room = player_path[-1]
-
-        if player_room.id not in visited:
-            visited[player_room.id] = {}
-
-        for next_room in get_neighbors(player_room):
-            stack.push([*player_path, next_room])
-                
-    return current_path
-
-
-traversal_path = traversal(player.current_room)
-
+def traversal(graph, traversal_path):
+    pass
 
 
 # Recursion
@@ -123,7 +85,7 @@ traversal_path = traversal(player.current_room)
 #     return current_path
 
 
-
+# traversal_path = traversal(player.current_room)
 
 
 # TRAVERSAL TEST
