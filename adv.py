@@ -2,6 +2,8 @@ from room import Room
 from player import Player
 from world import World
 
+from util import Stack
+
 import random
 from ast import literal_eval
 
@@ -27,6 +29,32 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
+def traversal(room):
+    opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+
+    # scaffold the stuff
+    def get_neighbors(node_id):
+        pass
+    
+    # DFT but with a dict like Social
+    stack = Stack()
+    stack.push([room.id])
+    visited = {} # dict like social.
+
+    current_path = []
+
+    while stack.size() > 0:
+        player_path = stack.pop()
+        player_room = player_path[-1]
+
+        if player_room not in visited:
+            visited[player_room] = player_path
+
+            for next_room in get_neighbors(player_room):
+               pass
+    pass
+
+
 traversal_path = []
 
 
@@ -48,15 +76,15 @@ else:
 
 
 
-#######
-# UNCOMMENT TO WALK AROUND
-#######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# #######
+# # UNCOMMENT TO WALK AROUND
+# #######
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
