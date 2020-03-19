@@ -38,12 +38,47 @@ player = Player(world.starting_room)
 # I know we're going to need an opposites dict to move backwards, though I'm not super sure why. Late night brain is unhelpful.
 
 # using DFT to traverse all nodes, with an extra path variable to pass letters to if thei rooms exit it marked with a question mark somehow
+opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+
 
 def traversal(room, visited=None):
-    opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
-    # # scaffold the stuff
-    # # DFT but with a dict like Social
+    if not visited:
+        visited = set()
+
+    current_path = []
+
+    visited.add(room.id)
+
+    # this is going to act as "get neighbors," basically
+    for direction in room.get_exits():
+        new_room = room.get_room_in_direction(direction)
+        print(new_room)
+
+        if new_room.id not in visited:
+            # recurse
+            new_path = traversal(new_room, visited)
+            print(new_path)
+            
+            # if traversal returns something
+            if new_path:
+                # create an array with the the direction string
+                # and concat it with the new path array and 
+                # creates an array out of the strings in the opposites dict
+                # at that direction
+                make_path = [direction] + new_path + [opposites[direction]]
+            else:
+                # if new path doesn't return anything, create an array out of the direction strings
+                # and whatever's in opposites at that direction
+                make_path = [direction, opposites[direction]]
+            print(current_path)
+            current_path = current_path + make_path
+
+
+
+
+    # scaffold the stuff
+    # DFT but with a dict like Social
     # stack = Stack()
     # stack.push([room])
     # visited = {} # dict like social.
@@ -87,7 +122,7 @@ def traversal(room, visited=None):
     #         for next_room in get_neighbors(player_room):
     #             stack.push([*player_path, next_room])
                 
-    # return current_path
+    return current_path
 
 
 traversal_path = traversal(player.current_room)
@@ -102,6 +137,7 @@ visited_rooms.add(player.current_room)
 for move in traversal_path:
     player.travel(move)
     visited_rooms.add(player.current_room)
+    print(player.current_room.id)
 
 if len(visited_rooms) == len(room_graph):
     print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
