@@ -13,10 +13,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -29,33 +29,68 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
-def traversal(room):
+
+# basic Idea behind my solution:
+# use room.get_exits() and
+# room.get_room_in_direction()
+# to find all available untraversed rooms.
+
+# I know we're going to need an opposites dict to move backwards, though I'm not super sure why. Late night brain is unhelpful.
+
+# using DFT to traverse all nodes, with an extra path variable to pass letters to if thei rooms exit it marked with a question mark somehow
+
+def traversal(room, visited=None):
     opposites = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
 
-    # scaffold the stuff
-    def get_neighbors(node_id):
-        pass
+    # # scaffold the stuff
+    # # DFT but with a dict like Social
+    # stack = Stack()
+    # stack.push([room])
+    # visited = {} # dict like social.
+
+    # current_path = []
     
-    # DFT but with a dict like Social
-    stack = Stack()
-    stack.push([room.id])
-    visited = {} # dict like social.
+    # def get_neighbors(node_id):
+    #     rooms = []
 
-    current_path = []
+    #     for direction in node_id.get_exits():
+    #         if node_id.get_room_in_direction(direction):
+    #             current_path.append(direction)
+    #             rooms.append(node_id.get_room_in_direction(direction))
+    #         else:
+    #             current_path.append(opposites[direction])
 
-    while stack.size() > 0:
-        player_path = stack.pop()
-        player_room = player_path[-1]
+    #         # path = node_id.get_room_in_direction(direction)
 
-        if player_room not in visited:
-            visited[player_room] = player_path
+    #         # if path:
+    #         #     # print(f"{current_path}")
+    #         #     
+    #         # # if deadend
+    #         # else:
+    #         #     print('hit else')
+    #         #     current_path.append(opposites[direction])
+    #         #     print(current_path)
+    #     return rooms
+    
 
-            for next_room in get_neighbors(player_room):
-               pass
-    pass
+    # # spec mentions keeping track of rooms
+    # # using a dict formate of room.id: [connections]
+
+    # # this means rooms are nodes, and directions are edges.
+    # while stack.size() > 0:
+    #     player_path = stack.pop()
+    #     player_room = player_path[-1]
+
+    #     if player_room.id not in visited:
+    #         visited[player_room.id] = player_path
+
+    #         for next_room in get_neighbors(player_room):
+    #             stack.push([*player_path, next_room])
+                
+    # return current_path
 
 
-traversal_path = []
+traversal_path = traversal(player.current_room)
 
 
 
